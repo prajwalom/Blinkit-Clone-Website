@@ -34,12 +34,29 @@ const orderSchema = new mongoose.Schema({
     delivery_address: {
         type: mongoose.Schema.ObjectId,
         ref: 'address',
-        required: true
     },
     payment_status: {
         type: String,
         default: ''
-    }
+    },
+
+    subtotalAmt: {
+        type: Number,
+        default: 0
+    },
+
+    totalAmt : {
+        type: Number,
+        default: 0
+    },
+
+    invoice_receipt: {
+        type: String,
+        default: ''
+    },
 }, {
     timestamps: true
 })
+
+const Order = mongoose.model('order', orderSchema);
+export default Order;
