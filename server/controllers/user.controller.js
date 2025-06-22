@@ -139,7 +139,8 @@ export async function loginUserController(req, res) {
             });
         }
 
-        
+        const accessToken = await generateAccessToken(user._id);
+        const refreshToken = await generateRefreshToken(user._id);
 
     } catch (error){
         return res.status(500).json({

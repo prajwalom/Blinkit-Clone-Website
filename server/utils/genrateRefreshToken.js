@@ -1,3 +1,5 @@
+import User from "../models/user.model";
+
 const genrateRefreshToken = async (userId) => {
     const token = jwt.sign({ id: userId }, process.env.SECRET_KEY_REFRESH_TOKEN, {
         expiresIn: '30d'
