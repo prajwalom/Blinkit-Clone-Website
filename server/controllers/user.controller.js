@@ -142,6 +142,31 @@ export async function loginUserController(req, res) {
         const accessToken = await generateAccessToken(user._id);
         const refreshToken = await generateRefreshToken(user._id);
 
+
+        const cookieOptions = {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+        };
+
+
+        res.cookie('refreshToken', refreshToken, cookieOptions);
+        res.cookie('accessToken', accessToken, cookieOptions);
+
+        return res.status(200).json({
+            success: true,
+            message: 'User logged in successfully',
+            data: {
+                userId: user._id,
+                email: user.email,
+                accessToken,
+                refreshToken
+            }
+        });
+
+
+
     } catch (error){
         return res.status(500).json({
             success: false,
