@@ -1,4 +1,5 @@
 import User from "../models/user.model";
+import jwt from "jsonwebtoken";
 
 const genrateRefreshToken = async (userId) => {
     const token = jwt.sign({ id: userId }, process.env.SECRET_KEY_REFRESH_TOKEN, {
