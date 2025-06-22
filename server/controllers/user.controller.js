@@ -1,5 +1,6 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
+import verifyEmailTemplate from '../utils/verifyTemplate.js';
 
 export async function registerUserController(req, res) {
     try {
@@ -34,12 +35,23 @@ export async function registerUserController(req, res) {
 
         const newUser = new User(payload);
         const savedUser = await newUser.save();
+        
+        const verifyEmsilUrl = `${process.env.FRONTEND_URL}/verify-email/${savedUser._id}`;
+
+        const verificationEmail = await sendEmail({
+            sendTo : email,
+            subject: 'Verify your email from BlinkIR',
+            html: verifyEmailTemplate({
+                name,
+                url: verifyEmsilUrl
+            })
+        });
+
         return res.status(201).json({
             success: true,
-            message: 'User registered successfully',
-            user: {
-                id: savedUser._id,
-                name: savedUser.name,
+            message: 'User registered successfully.',
+            data: {
+                userId: savedUser._id,
                 email: savedUser.email
             }
         });
