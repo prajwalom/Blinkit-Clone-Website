@@ -64,3 +64,35 @@ export async function registerUserController(req, res) {
         });
     }
 }
+
+export async function verifyEmailController(req, res) {
+    try {
+        const { code } = res.body;
+        const user = await User.findone({ _id: code})
+
+        if(!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Invalid Code',
+                error: true,
+            });
+        }
+
+        const updateuser = await user.updateOne({ _id : code }, {
+            verify_email: true
+        });
+
+        return res.json ({
+            message: 'Verification Done',
+            success: true,
+            error: false
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Server Error',
+            error: error.message
+        });
+    }
+}
