@@ -96,3 +96,56 @@ export async function verifyEmailController(req, res) {
         });
     }
 }
+
+
+// login
+
+export async function loginUserController(req, res) {
+    try {
+
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+
+        if(!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+                error: true,
+            });
+        }
+
+        if (user.status !== 'active' ) {
+            return res.status(403).json({
+                success: false,
+                message: 'User is not active, Please Contact Admin',
+                error: true,
+            });
+        }
+
+        const checkPassword = await bcrypt.compare(password, user.password);
+        if (!checkPassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid Password, please try again',
+                error: true,
+            });
+        }
+
+        if (!user.verify_email) {
+            return res.status(403).json({
+                success: false,
+                message: 'Please verify your email before logging in',
+                error: true,
+            });
+        }
+
+        
+
+    } catch (error){
+        return res.status(500).json({
+            success: false,
+            message: 'Server Error',
+            error: error.message
+        });
+    }
+}
