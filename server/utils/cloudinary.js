@@ -6,7 +6,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET, }) 
 
 const cloodaniary = async(image) => {
-    const buffer = image.buffer || Buffer.from(await image.arrayBuffer());
+    const buffer = image?.buffer || Buffer.from(await image.arrayBuffer());
 
     const uploadImage = await new Promise((resolve, reject) => {
         cloudinary.uploader.upload_stream(

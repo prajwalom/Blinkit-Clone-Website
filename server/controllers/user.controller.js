@@ -225,3 +225,21 @@ export async function logoutUserController(req, res) {
         
     }
 }
+
+//uplod user profile image
+
+
+export async function uploadAvatar(req, res) {
+    try {
+
+        const image = req.file;
+        
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Server Error',
+            error: error.message
+        });
+        
+    }
+}
