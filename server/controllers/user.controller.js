@@ -190,6 +190,11 @@ export async function loginUserController(req, res) {
 
 export async function logoutUserController(req, res) {
     try {
+
+        const userId = req.userId;
+
+        
+        
         const cookieOptions = {
             httpOnly: true,
             secure: true,
@@ -199,7 +204,12 @@ export async function logoutUserController(req, res) {
         res.clearCookie('refreshToken');
         res.clearCookie('accessToken');
 
-        
+        const removeRefreshToken = await User.updateOne(
+            { _id: userId },
+            { $unset: { refreshToken: "" } }
+        );
+
+
 
         return res.status(200).json({
             success: true,
