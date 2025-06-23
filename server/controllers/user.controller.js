@@ -232,7 +232,20 @@ export async function logoutUserController(req, res) {
 export async function uploadAvatar(req, res) {
     try {
 
+        const userId = req.userId;
+
         const image = req.file;
+        const uploadImage = await cloudinary(image);
+
+        const updateuser = await User.findByIdAndUpdate(
+            userId, {avatar : uploadImage.url})
+
+
+        return res.json({
+            message: 'uplod Profile Picture',
+            data: {
+                avatar: uploadImage.url}
+        })
         
     } catch (error) {
         return res.status(500).json({
