@@ -184,3 +184,34 @@ export async function loginUserController(req, res) {
         });
     }
 }
+
+
+// logout controller
+
+export async function logoutUserController(req, res) {
+    try {
+        const cookieOptions = {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+        };
+
+        res.clearCookie('refreshToken');
+        res.clearCookie('accessToken');
+
+        
+
+        return res.status(200).json({
+            success: true,
+            message: 'User logged out successfully',
+        });
+        
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Server Error',
+            error: error.message
+        });
+        
+    }
+}
